@@ -1,6 +1,6 @@
 # User Stories
 
-This document defines of the Proxy-Portfolio from the perspective of different viewers **Recruiters**, **Visitors** and **Admin**.
+This document defines the Proxy-Portfolio from the perspective of different viewers **Recruiters**, **Visitors** and **Admin**.
 
 -------------
 
