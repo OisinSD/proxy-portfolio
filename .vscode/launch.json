@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-PpApplication<pp>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "proxy.portfolio.pp.PpApplication",
+            "projectName": "pp",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
