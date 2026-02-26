@@ -2,7 +2,7 @@ name:  Java CI with Gradle and PostgreSQL
 
 on:
   push:
-    branches: [ "main", "feature/PP-13-database-environment-setup" ]
+    branches: [ "main", "feature/PP-66-Automated-CI-Pipeline" ]
   pull_request:
     branches: [ "main" ]
 
