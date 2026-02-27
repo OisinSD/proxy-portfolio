@@ -26,7 +26,7 @@ public class Project {
     @Column(name = "is_active")
     private Boolean isActive = true;
 
-    @Column(name = "respository_url", columnDefinition="TEXT")
+    @Column(name = "repository_url", columnDefinition="TEXT")
     private String repositoryUrl;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
