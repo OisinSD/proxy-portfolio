@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import jakarta.transaction.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import java.time.OffsetDateTime;
 import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
@@ -21,6 +21,8 @@ public class SkillRepoIntegrationTest {
     private ProjectSkillRepo projectSkillRepo;
     @Autowired
     private ProjectRepo projectRepo;
+    @Autowired
+    private AccessLogRepo accessLogRepo;
 
     @Test
     void shouldSaveAndRetrieveSkill(){
@@ -95,5 +97,56 @@ public class SkillRepoIntegrationTest {
             () -> {
                 projectSkillRepo.saveAndFlush(pSkill);
             });
+    }
+
+    @Test
+    void shouldThrowExceptionWhenMissingForignKey(){
+    // Arrange
+    AccessLog accessLog = new AccessLog();
+    accessLog.setAccessedAt(OffsetDateTime.now());
+    accessLog.setIpAddress("22.334.222");
+    accessLog.setUserAgent("Test");
+    // accessLog.setProject("nothing");
+
+    
+    assertThrows(org.springframework.dao.DataIntegrityViolationException.class,
+        () -> {
+            accessLogRepo.saveAndFlush(accessLog);
+        });
+    }
+
+
+    @Test
+    void shouldDeletingProjectShouldDeleteItsLogs(){
+        
+        // Arrange (Create project and accessLog
+        Project myProject = new Project();
+        myProject.setProjectName("Test Project");
+        myProject.setSlug("Test Project " + System.currentTimeMillis());
+        myProject.setInternalEndpoint("http://localhost:8080/test");
+        myProject.setIsActive(true);
+        myProject.setRepositoryUrl("https://github.com/user/repo");
+        
+        // Save (Act)
+        projectRepo.saveAndFlush(myProject);
+        
+        AccessLog accessLog = new AccessLog();
+        accessLog.setAccessedAt(OffsetDateTime.now());
+        accessLog.setIpAddress("22.334.222");
+        accessLog.setUserAgent("Test");
+        accessLog.setProject(myProject);
+
+        // Save (Act)
+        accessLogRepo.saveAndFlush(accessLog);
+        
+        //Checking If project, & accessLog Id is not null
+        assertThat(myProject.getId()).isNotNull();
+        assertThat(accessLog.getId()).isNotNull();
+
+        //Deleting project
+
+        projectRepo.delete(myProject);
+
+        assertThat(accessLogRepo.findById(myProject.getId())).isNotPresent();
     }
 }
